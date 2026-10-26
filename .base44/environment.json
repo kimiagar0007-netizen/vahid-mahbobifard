@@ -1,0 +1,28 @@
+{
+  "previewPort": 3000,
+  "healthPath": "/",
+  "startCommand": "docker compose --project-name app --project-directory \"$BASE44_PROJECT_ROOT\" -f \"$BASE44_PROJECT_ROOT/docker-compose.base44.yml\" up -d --build",
+  "services": {
+    "web": { "port": 3000, "kind": "web", "description": "Vite dev server (React + RTL) — main preview entry" },
+    "api": { "port": 8000, "kind": "api", "description": "Express 5 + SQLite API (health: /api/health)" }
+  },
+  "secrets": [
+    {
+      "name": "ADMIN_USERNAME",
+      "description": "نام کاربری حساب مدیر پنل. پیش‌فرض توسعه: admin (فایل .env.base44-defaults).",
+      "requiredAtBoot": false,
+      "generatedForDevelopment": false
+    },
+    {
+      "name": "ADMIN_PASSWORD",
+      "description": "رمز عبور حساب مدیر. تا زمانی که مقدار امن وارد نشود از رمز پیش‌فرض توسعه استفاده می‌شود؛ پس از تغییر از پنل مدیریت هم قابل به‌روزرسانی است.",
+      "requiredAtBoot": false,
+      "generatedForDevelopment": false
+    }
+  ],
+  "notes": [
+    "هیچ کلید سرویس بیرونی برای بالا آمدن برنامه لازم نیست: درگاه پرداخت، پیامک و واتساپ تنظیم نشده‌اند و در پنل مدیریت قابل تکمیل‌اند.",
+    "داده‌های پایه یک‌بار توسط سرویس seed ساخته می‌شوند و در اجراهای بعدی بازنویسی نمی‌شوند.",
+    "قیمت محصولات ثبت نشده است؛ تا ثبت قیمت در پنل مدیریت، خرید غیرفعال می‌ماند."
+  ]
+}

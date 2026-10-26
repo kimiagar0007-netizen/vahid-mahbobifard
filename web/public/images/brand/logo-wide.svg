@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 120" width="480" height="120" role="img">
+<rect width="480" height="120" fill="#0B0B0D" rx="14.399999999999999"/>
+<g fill="none" stroke="#D4AF62" stroke-width="6.6" stroke-linecap="round">
+  <path d="M 21.599999999999998 81.60000000000001 L 60 31.200000000000003 L 98.39999999999999 81.60000000000001"/>
+  <path d="M 33.6 81.60000000000001 L 60 45.6 L 86.39999999999999 81.60000000000001"/>
+  <path d="M 16.8 96 L 103.2 96"/>
+  <path d="M 40.800000000000004 96 L 40.800000000000004 81.60000000000001"/>
+  <path d="M 79.2 96 L 79.2 81.60000000000001"/>
+</g>
+<circle cx="60" cy="57.6" r="3.072" fill="#F1D99A"/>
+<text x="138" y="55.2" fill="#FFFFFF" font-family="sans-serif" font-size="36" font-weight="700">KNAUF KARAJ</text>
+<text x="138" y="88.8" fill="#D4AF62" font-family="sans-serif" font-size="20.400000000000002" letter-spacing="3">CEILING &amp; DRYWALL</text>
+</svg>

@@ -1,0 +1,103 @@
+/* ---------------------------------------------------------------------------
+   Design tokens — the single source of truth for colour, type, spacing, radius
+   and motion. Change values here, not in components.
+   --------------------------------------------------------------------------- */
+:root {
+  /* Brand palette (fixed by the brand guide) */
+  --c-black: #0b0b0d;
+  --c-black-deep: #121216;
+  --c-gold: #d4af62;
+  --c-gold-light: #f1d99a;
+  --c-white: #ffffff;
+  --c-gray-light: #d7d7db;
+  --c-gray-dark: #25252a;
+
+  /* Surfaces */
+  --surface-page: var(--c-black);
+  --surface-raised: #17171c;
+  --surface-raised-2: #1e1e24;
+  --surface-inset: var(--c-black-deep);
+  --surface-light: #f4f4f6;
+  --surface-gold-soft: rgba(212, 175, 98, 0.09);
+
+  /* Borders */
+  --border-subtle: rgba(212, 175, 98, 0.18);
+  --border-strong: rgba(212, 175, 98, 0.45);
+  --border-neutral: #2b2b33;
+
+  /* Text */
+  --text-primary: var(--c-white);
+  --text-secondary: var(--c-gray-light);
+  --text-muted: #9b9ba5;
+  --text-on-gold: #16160f;
+  --text-on-light: #1a1a1f;
+
+  /* States */
+  --c-danger: #e0756b;
+  --c-warning: #e8b86d;
+  --c-success: #74c08f;
+  --c-info: #86a9d6;
+
+  /* Type */
+  --font-fa: 'Vazirmatn', system-ui, 'Segoe UI', Tahoma, sans-serif;
+  --fs-xs: 0.78rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1rem;
+  --fs-md: 1.06rem;
+  --fs-lg: 1.25rem;
+  --fs-xl: 1.55rem;
+  --fs-2xl: 2rem;
+  --fs-3xl: 2.6rem;
+  --fs-hero: clamp(2rem, 4.6vw, 3.8rem);
+  --lh-tight: 1.35;
+  --lh-normal: 1.8;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-bold: 700;
+  --fw-black: 800;
+
+  /* Spacing scale */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+
+  /* Radii — rounded, but never pill-shaped for surfaces */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  /* Elevation (restrained: no heavy drop shadows) */
+  --shadow-card: 0 6px 20px rgba(0, 0, 0, 0.28);
+  --shadow-soft: 0 14px 36px rgba(0, 0, 0, 0.35);
+
+  /* Layout */
+  --container: 1240px;
+  --container-narrow: 880px;
+  --header-height: 74px;
+
+  /* Motion */
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --dur-fast: 150ms;
+  --dur: 260ms;
+  --dur-slow: 480ms;
+
+  /* Layers */
+  --z-header: 40;
+  --z-float: 50;
+  --z-overlay: 80;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --header-height: 64px;
+    --fs-3xl: 2rem;
+    --sp-9: 64px;
+  }
+}

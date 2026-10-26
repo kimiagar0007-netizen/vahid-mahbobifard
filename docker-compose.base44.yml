@@ -1,0 +1,144 @@
+# Base44 development stack for the Knauf Karaj site.
+# Runs the app from the cloned source with live reload (Vite dev server + node --watch).
+# Docs: see AGENTS.md.
+name: app
+
+x-node-env: &node-env
+  NODE_ENV: development
+  # Preview-only overrides are gated on BASE44_PREVIEW_MODE === "1" inside the app config.
+  BASE44_PREVIEW_MODE:
+  BASE44_PUBLIC_HOST_SUFFIX:
+  BASE44_SANDBOX_HOST_DOMAIN:
+
+services:
+  # ---------------------------------------------------------------------------
+  # One-shot: applies the SQLite schema and seeds reference content (idempotent).
+  # ---------------------------------------------------------------------------
+  seed:
+    image: node:22
+    working_dir: /app/api
+    restart: "no"
+    volumes:
+      - "${BASE44_PROJECT_ROOT}:/app"
+      - api_node_modules:/app/api/node_modules
+      - app_data:/app/data
+    env_file:
+      - ${BASE44_PROJECT_ROOT}/.env.base44-defaults
+      - /run/base44/app.env
+    environment:
+      DATA_DIR: /app/data
+    command:
+      - sh
+      - -ec
+      - |
+        if [ ! -f node_modules/.deps-ok ] || [ package-lock.json -nt node_modules/.deps-ok ]; then
+          npm ci --no-audit --no-fund
+          touch node_modules/.deps-ok
+        fi
+        node src/seed.js
+
+  # ---------------------------------------------------------------------------
+  # API: Express + SQLite (better-sqlite3). Host port 8000 (direct access/docs).
+  # ---------------------------------------------------------------------------
+  api:
+    image: node:22
+    working_dir: /app/api
+    restart: on-failure
+    volumes:
+      - "${BASE44_PROJECT_ROOT}:/app"
+      - api_node_modules:/app/api/node_modules
+      - app_data:/app/data
+    env_file:
+      - ${BASE44_PROJECT_ROOT}/.env.base44-defaults
+      - /run/base44/app.env
+    environment:
+      <<: *node-env
+      PORT: "8000"
+      DATA_DIR: /app/data
+    ports:
+      - "8000:8000"
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:8000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"
+      interval: 10s
+      timeout: 4s
+      retries: 6
+      start_period: 30s
+    labels:
+      base44.project: "API (Express + SQLite)"
+      base44.kind: api
+      base44.port: "8000"
+    command:
+      - sh
+      - -ec
+      - |
+        if [ ! -f node_modules/.deps-ok ] || [ package-lock.json -nt node_modules/.deps-ok ]; then
+          npm ci --no-audit --no-fund
+          touch node_modules/.deps-ok
+        fi
+        exec npm run dev
+
+  # ---------------------------------------------------------------------------
+  # Web: Vite dev server on host port 3000. Proxies /api to the api service
+  # (single-origin wiring, so session cookies work without CORS).
+  # ---------------------------------------------------------------------------
+  web:
+    image: node:22
+    working_dir: /app/web
+    restart: on-failure
+    volumes:
+      - "${BASE44_PROJECT_ROOT}:/app"
+      - web_node_modules:/app/web/node_modules
+    environment:
+      <<: *node-env
+      API_PROXY_TARGET: http://api:8000
+      # Vite >= 6.1 appends this to server.allowedHosts (platform-provided).
+      __VITE_ADDITIONAL_SERVER_ALLOWED_HOSTS:
+    ports:
+      - "3000:5173"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - |
+          const checks = [['frontend','http://127.0.0.1:5173/'],['api via proxy','http://127.0.0.1:5173/api/health']];
+          Promise.all(checks.map(async ([name,url]) => {
+            try { const r = await fetch(url); if (!r.ok) return name; } catch { return name; }
+            return null;
+          })).then(failed => {
+            const bad = failed.filter(Boolean);
+            if (bad.length) console.error('unhealthy component(s): ' + bad.join(', '));
+            process.exit(bad.length ? 1 : 0);
+          });
+      interval: 10s
+      timeout: 6s
+      retries: 6
+      start_period: 40s
+    labels:
+      base44.project: "Website (Vite + React)"
+      base44.kind: web
+      base44.port: "3000"
+    command:
+      - sh
+      - -ec
+      - |
+        if [ ! -f node_modules/.deps-ok ] || [ package-lock.json -nt node_modules/.deps-ok ]; then
+          npm ci --no-audit --no-fund
+          touch node_modules/.deps-ok
+        fi
+        exec npm run dev -- --host 0.0.0.0 --port 5173
+
+volumes:
+  api_node_modules:
+  web_node_modules:
+  app_data:

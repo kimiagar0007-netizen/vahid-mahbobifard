@@ -1,0 +1,238 @@
+/* =============================================================== header */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: rgba(11, 11, 13, 0.82);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+}
+
+.header--scrolled {
+  background: rgba(11, 11, 13, 0.96);
+  border-bottom-color: var(--border-subtle);
+}
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  min-height: var(--header-height);
+}
+
+.header__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-shrink: 0;
+}
+
+.header__logo {
+  width: 42px;
+  height: 42px;
+}
+
+.header__brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.header__brand-name {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-bold);
+}
+
+.header__brand-sub {
+  font-size: var(--fs-xs);
+  letter-spacing: 0.14em;
+  color: var(--c-gold);
+  text-transform: uppercase;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  flex-wrap: wrap;
+}
+
+.nav__link {
+  position: relative;
+  padding: 10px var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  transition: color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+
+.nav__link:hover {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.nav__link--active {
+  color: var(--c-gold);
+}
+
+.nav__link--active::after {
+  content: '';
+  position: absolute;
+  inset-inline: var(--sp-3);
+  bottom: 4px;
+  height: 2px;
+  background: var(--c-gold);
+  border-radius: var(--radius-pill);
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-shrink: 0;
+}
+
+.header__icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 9px var(--sp-3);
+  border: 1px solid var(--border-neutral);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+
+.header__icon-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.header__cart-count {
+  position: absolute;
+  top: -8px;
+  inset-inline-end: -8px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  font-size: 0.7rem;
+  font-weight: var(--fw-bold);
+  color: var(--text-on-gold);
+  background: var(--c-gold);
+  border-radius: var(--radius-pill);
+}
+
+.header__phone {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-sm);
+  color: var(--text-secondary);
+  padding: 8px 0;
+}
+
+.header__phone:hover {
+  color: var(--c-gold);
+}
+
+.burger {
+  display: none;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-neutral);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  cursor: pointer;
+}
+
+.mobile-nav {
+  display: none;
+  border-top: 1px solid var(--border-neutral);
+  background: rgba(11, 11, 13, 0.98);
+  padding: var(--sp-4) 0 var(--sp-6);
+}
+
+.mobile-nav--open {
+  display: block;
+}
+
+.mobile-nav__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-nav__link {
+  display: block;
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--border-neutral);
+  color: var(--text-secondary);
+}
+
+.mobile-nav__link--active {
+  color: var(--c-gold);
+}
+
+.mobile-nav__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  margin-top: var(--sp-5);
+}
+
+@media (max-width: 1080px) {
+  .nav {
+    display: none;
+  }
+
+  .burger {
+    display: inline-flex;
+  }
+
+  .header__phone {
+    display: none;
+  }
+}
+
+/* Compact header on small screens: the CTA lives in the mobile menu, so the
+   header row never exceeds the viewport width. */
+@media (max-width: 720px) {
+  .header__actions {
+    gap: var(--sp-2);
+  }
+
+  .header__actions .btn {
+    display: none;
+  }
+
+  .header__brand-sub {
+    display: none;
+  }
+
+  .header__brand-name {
+    font-size: var(--fs-base);
+  }
+
+  .header__logo {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 620px) {
+  .container {
+    padding-inline: var(--sp-4);
+  }
+}

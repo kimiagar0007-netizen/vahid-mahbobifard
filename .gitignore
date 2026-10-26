@@ -1,0 +1,12 @@
+node_modules/
+dist/
+data/
+*.log
+.DS_Store
+.env
+.env.local
+.base44/*.local.json
+
+# Development placeholder credentials (committed on purpose — real values come
+# from the Base44 secret store and override this file).
+!.env.base44-defaults
