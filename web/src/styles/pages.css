@@ -135,6 +135,131 @@
   }
 }
 
+/* ------------------------------------------- hero: scroll-driven video stage */
+
+/*
+ * The track is the scroll distance that drives the whole video (~200vh of real
+ * scrolling below the 100vh stage), and the stage stays pinned inside it while
+ * the footage is scrubbed. Engine: components/home/useHeroScrub.js.
+ */
+.hero-track {
+  position: relative;
+  height: 300vh;
+}
+
+/*
+ * Height stays in vh rather than dvh/svh on purpose: the stage must not resize
+ * mid-scroll, or mobile browser bars would rescale the footage while scrubbing.
+ */
+.hero-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.hero.hero--scrub {
+  height: 100%;
+  min-height: 0;
+}
+
+/*
+ * Layer stack inside .hero__media: current image (fallback) → frame 0 of the
+ * video → the video itself. Order in the DOM decides what covers what.
+ */
+.hero__poster,
+.hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero__video {
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease);
+}
+
+.hero__video.is-ready {
+  opacity: 1;
+}
+
+/*
+ * Video-led hero: the scrim carries the headline and then fades away together
+ * with it (opacity is written by the scrub loop), so the footage ends up
+ * uncovered instead of sitting under a heavy overlay.
+ */
+.hero--scrub .hero__scrim {
+  background: linear-gradient(
+    to left,
+    rgba(11, 11, 13, 0.9) 0%,
+    rgba(11, 11, 13, 0.7) 40%,
+    rgba(11, 11, 13, 0.16) 100%
+  );
+}
+
+.hero--scrub .hero__inner {
+  will-change: opacity, transform;
+}
+
+@media (max-width: 700px) {
+  .hero--scrub .hero__scrim {
+    background: linear-gradient(to top, rgba(11, 11, 13, 0.92) 26%, rgba(11, 11, 13, 0.5) 100%);
+  }
+}
+
+/* Minimal preparation state: a hairline and a whisper, never a spinner. */
+.hero__loader {
+  position: absolute;
+  inset-inline: 0;
+  bottom: var(--sp-6);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-2);
+  pointer-events: none;
+  transition: opacity var(--dur-slow) var(--ease), visibility 0s linear var(--dur-slow);
+}
+
+.hero__loader.is-done {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.hero__loader-bar {
+  width: 120px;
+  height: 2px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.16);
+  overflow: hidden;
+}
+
+.hero__loader-bar::after {
+  content: '';
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--c-gold);
+  animation: hero-loader-sheen 1.4s var(--ease) infinite;
+}
+
+.hero__loader-text {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+@keyframes hero-loader-sheen {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(320%);
+  }
+}
+
 /* ============================================================ about intro */
 
 .about-intro__grid {
